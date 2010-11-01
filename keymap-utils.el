@@ -4,7 +4,7 @@
 
 ;; Author: Jonas Bernoulli <jonas@bernoul.li>
 ;; Created: 20080830
-;; Updated: 20100925
+;; Updated: 20101101
 ;; Version: 0.3_pre
 ;; Homepage: http://github.com/tarsius/keymap-utils
 ;; Keywords: convenience, extensions
@@ -262,7 +262,7 @@ the title of the group and whose cdr is a list of subgroups..."
   (cons (if (stringp subgroup)
 	    (mapcan (lambda (elt)
 		      (when (and (vectorp (car elt))
-				 (= (length (car elt)) 1)
+				 (symbolp (aref (car elt) 0))
 				 (string-match subgroup
 					       (symbol-name
 						(aref (car elt) 0))))
