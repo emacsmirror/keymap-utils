@@ -294,10 +294,12 @@ indentation mechanism:
           (cl-case def
             (=)
             ((> :remove)
-             (unless (cl-member-if (lambda (form)
-                                     (and (eq (car form) 'keymap-set)
-                                          (equal (car (cddr form)) key)))
-                                   body)
+             ;; Emacs 31.1 adds `any'/`member-if' and deprecates `cl-member-if'.
+             (unless (funcall (static-if (fboundp 'any) #'any #'cl-member-if)
+                              (lambda (form)
+                                (and (eq (car form) 'keymap-set)
+                                     (equal (car (cddr form)) key)))
+                              body)
                (push `(keymap-unset ,mapvar ,key t) body)))
             (t
              (push `(keymap-set ,mapvar ,key ,def) body))))))
