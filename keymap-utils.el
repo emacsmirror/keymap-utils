@@ -9,7 +9,7 @@
 ;; Package-Version: 4.1.3
 ;; Package-Requires: (
 ;;     (emacs  "28.1")
-;;     (compat "30.1"))
+;;     (compat "31.0"))
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -294,12 +294,10 @@ indentation mechanism:
           (cl-case def
             (=)
             ((> :remove)
-             ;; Emacs 31.1 adds `any'/`member-if' and deprecates `cl-member-if'.
-             (unless (funcall (static-if (fboundp 'any) #'any #'cl-member-if)
-                              (lambda (form)
-                                (and (eq (car form) 'keymap-set)
-                                     (equal (car (cddr form)) key)))
-                              body)
+             (unless (any (lambda (form)
+                            (and (eq (car form) 'keymap-set)
+                                 (equal (car (cddr form)) key)))
+                          body)
                (push `(keymap-unset ,mapvar ,key t) body)))
             (t
              (push `(keymap-set ,mapvar ,key ,def) body))))))
@@ -347,11 +345,11 @@ The last event in an event sequence may be a character range.
                    (setq beg key end key)
                    (while-let ((mem (cl-find (1- beg) v :key #'car))
                                (_(equal (cadr mem) def)))
-                     (cl-decf beg)
+                     (decf beg)
                      (setq v (remove mem v)))
                    (while-let ((mem (cl-find (1+ end) v :key #'car))
                                (_(equal (cadr mem) def)))
-                     (cl-incf end)
+                     (incf end)
                      (setq v (remove mem v)))))
             (cond ((or (not beg) (eq beg end))
                    (push (list key def) vv))
