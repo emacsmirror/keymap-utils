@@ -9,7 +9,8 @@
 ;; Package-Version: 4.1.3
 ;; Package-Requires: (
 ;;     (emacs  "28.1")
-;;     (compat "31.0"))
+;;     (compat "31.0")
+;;     (llama   "1.0"))
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -35,6 +36,7 @@
 
 (require 'cl-lib)
 (require 'compat)
+(require 'llama)
 
 ;;; Predicates
 
@@ -376,7 +378,7 @@ FUNCTION once for each event sequence and the definition it is
 bound to.
 
 The last event in an event sequence may be a character range."
-  (mapc (lambda (e) (apply function e)) (kmu-keymap-bindings keymap)))
+  (mapc (##apply function %) (kmu-keymap-bindings keymap)))
 
 (defun kmu-keymap-definitions (keymap &optional nomenu nomouse)
   "Return a list of all definitions in KEYMAP.
