@@ -398,7 +398,7 @@ The last event in an event sequence may be a character range.
     (kmu-map-keymap (lambda (key def)
                       (or (and nomenu (kmu-menu-binding-p def))
                           (and nomouse (mouse-event-p (aref key 0)))
-                          (if-let ((elt (assq def bindings)))
+                          (if-let* ((elt (assq def bindings)))
                               (setcdr elt (cons key (cdr elt)))
                             (push (list def key) bindings))))
                     keymap)
